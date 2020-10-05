@@ -1,0 +1,131 @@
+#creating table
+
+import pandas as pd
+from pandas import DataFrame
+
+d={'EMPLOYEE NO:':['99999','45678','93456','39285','88889','19400','55664','22334','98122','34677','76577','87566','11223','23446','67448','22300','54337','46500','48921','65784','82300','11342','53873','65344','54399','54216','87097','10108','54380','65437'],
+   'EMPLOYEE NAME:':['KINZA','ARBISH','TAHA','RIJA','SANA','MIDHAT','HAMZA','RAMSHA','SANA','FARHAN','GHAZI','JIA','HINA','HOOR','KINZA','BISMA','RIJA','TAHA','JIA','BASIT','BUSHRA','ARBISH','AREEBA','SAMRA','MAHER','BISMA','ILMA','FARHAN','ILSA','HANI'],
+   'LANDLINE NO:':['34911111','34922222','34933333','34944444','34955555','34966666','34977777','34988888','34999999','34910000','34910001','34910002','34910003','34910004','34910005','34910006','34910007','34910008','34910009','34910010','34910011','34910012','34910013','34910014','34910015','34910016','34910017','34910018','34910019','34910020'],
+   'MOBILE NO:':['03482301000','03482302000','03482303000','03482304000','03482305000','03482306000','03482307000','03482308000','03482309000','03482310000','03482311001','03482311002','03482311003','03482311004','03482311005','03482311006','03482311007','03482311008','03482311009','03482311010','03482311011','03482311012','03482311013','03482311014','03482311015','03482311016','03482311017','03482311018','03482311019','03482311020']}
+df=DataFrame(d)
+#print(df)
+
+nl=[[0,0,0,0] for i in range(97)]
+
+e=d['EMPLOYEE NO:']
+n=d['EMPLOYEE NAME:']
+l=d['LANDLINE NO:']
+m=d['MOBILE NO:']
+
+#creating hash function
+
+def hashfunc(key):
+  loc=int(key)%97
+  return loc
+
+#quadratic probing
+
+def insert(k):
+  r=0
+  while r<len(k):
+    w=e.index(k[r])    #w is the index of employee no provided at rth place
+    r=r+1
+    c=int(e[w])%97
+    if nl[c][0]==0:
+      nl[c][0]=e[w]
+      nl[c][1]=n[w]
+      nl[c][2]=l[w]
+      nl[c][3]=m[w]
+    elif nl[c][0]!=0:
+      i=1
+      q=1
+      while True:
+       a=(c+i)%97
+       if nl[a][0]==0:
+          nl[a][0]=e[w]
+          nl[a][1]=n[w]
+          nl[a][2]=l[w]
+          nl[a][3]=m[w]
+          break
+       else:
+          i=(q+1)**2
+          q=q+1
+    else:
+      print('error')
+  s=DataFrame(nl,columns=['EMPLOYEE NO','EMPLOYEE NAME','LANDLINE NO','MOBILE NO'])
+  s.index.name='HASH ADDRESS'
+  #s.to_csv('s.csv')
+  print(s)
+
+  
+insert(['99999','45678','93456','39285','88889','19400','55664','22334','98122','34677','76577','87566','11223','23446','67448','22300','54337','46500','48921','65784','82300','11342','53873','65344','54399'])
+insert(['54216','87097','10108','54380','65437'])
+
+#counting no of probes for successful search
+
+def sprobes(z):
+  t=0
+  u=0
+  while t<len(z):
+    print(z[t] +' successful probes :')
+    x=e.index(z[t])    #w is the index of employee no provided at rth place
+    t=t+1
+    y=int(e[x])%97
+    if nl[y][0]==e[x]:
+      u=u+1
+      print(u)
+      u=0
+    elif nl[y][0]!=e[x]:
+      u=u+1
+      m=1
+      n=1
+      while True:
+        v=(y+m)%97
+        if nl[v][0]==e[x]:
+          u=u+1
+          print(u)
+          u=0
+          break
+        else:
+          u=u+1
+          m=(n+1)**2
+          n=n+1
+    else:
+      print('error')
+
+
+      
+sprobes(['88889','46500','19400','99999','48921'])
+
+#counting no of probes for successful search
+
+def uprobes(en):
+  uc=0
+  for tc in range(len(en)):
+    print('the unsuccessful probes of ' + en[tc] + ' are')
+    yc=(int(en[tc]))%97
+    if nl[yc][0]==0:
+      uc=uc+1
+      print(uc)
+      uc=0
+    elif nl[yc][0]!=0:
+      uc=uc+1
+      mc=1
+      nc=1
+      while True:
+        vc=(yc+mc)%97
+        if nl[vc][0]==0:
+          uc=uc+1
+          print(uc)
+          uc=0
+          break
+        else:
+          uc=uc+1
+          mc=(nc+1)**2
+          nc=nc+1
+    else:
+      print('error')
+
+
+uprobes(['24675','22222','10000','90909','50505'])
+
